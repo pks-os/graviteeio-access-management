@@ -1,0 +1,52 @@
+<!--
+
+    Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<div class="audits-container" fxLayout="column">
+  <h1 *ngIf="!isEmpty">Audit log</h1>
+
+  <div class="audits-content" *ngIf="!isEmpty">
+    <ngx-datatable class="material"
+                   [columnMode]="'flex'"
+                   [headerHeight]="40"
+                   [footerHeight]="40"
+                   [rowHeight]="50"
+                   [rows]='audits'
+                   [externalPaging]="true"
+                   [count]="page.totalElements"
+                   [offset]="page.pageNumber"
+                   [limit]="page.size"
+                   (page)='setPage($event)'>
+      <ngx-datatable-column name="Id" [flexGrow]="1">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{row.id}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Actions" [flexGrow]="1">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div fxLayout="row" class="audits-actions">
+            <a mat-icon-button [routerLink]="[row.id]"><mat-icon matTooltip="More info">more_horiz</mat-icon></a>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  <app-emptystate *ngIf="isEmpty"
+                  [message]="'Audits will appear here'"
+                  [subMessage]="'Start using the platform to get information'"
+                  [icon]="'list'"></app-emptystate>
+</div>

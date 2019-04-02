@@ -75,6 +75,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.gravitee.am.management</groupId>
+            <artifactId>gravitee-am-management-api-reporter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Jackson dependencies -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

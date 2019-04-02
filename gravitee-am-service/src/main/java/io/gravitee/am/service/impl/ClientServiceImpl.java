@@ -24,6 +24,7 @@ import io.gravitee.am.model.common.event.Action;
 import io.gravitee.am.model.common.event.Event;
 import io.gravitee.am.model.common.event.Payload;
 import io.gravitee.am.model.common.event.Type;
+import io.gravitee.am.model.log.Audit;
 import io.gravitee.am.repository.management.api.ClientRepository;
 import io.gravitee.am.repository.oauth2.api.AccessTokenRepository;
 import io.gravitee.am.service.*;
@@ -76,6 +77,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private FormService formService;
+
+    @Autowired
+    private AuditService auditService;
 
     @Override
     public Maybe<Client> findById(String id) {
@@ -278,6 +282,13 @@ public class ClientServiceImpl implements ClientService {
                     return Single.just(client);
                 })
                 .flatMap(client -> this.create(client))
+                .doOnSuccess(client -> {
+                    Audit audit = new Audit();
+                    audit.setId(RandomString.generate());
+                    audit.setDomain("admin");
+                    audit.setType("client.create");
+                    new Thread(() -> auditService.report(audit)).start();
+                })
                 .onErrorResumeNext(this::handleError);
     }
 

@@ -15,6 +15,7 @@
  */
 package io.gravitee.am.management.handlers.admin.provider.jwt;
 
+import io.gravitee.am.common.oidc.StandardClaims;
 import io.gravitee.am.identityprovider.api.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -78,10 +79,11 @@ public class JWTGenerator implements InitializingBean {
 
     private String generateToken(final User user, Date expirationDate) {
         String compactJws = Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
-                .setClaims(user.getAdditionalInformation())
+                .claim(StandardClaims.PREFERRED_USERNAME, user.getUsername())
+                .addClaims(user.getAdditionalInformation())
                 .signWith(key)
                 .compact();
 

@@ -178,6 +178,11 @@ import { EmailResolver } from "./resolvers/email.resolver";
 import { SelectClientsComponent } from "./domain/components/clients/select-clients.component";
 import { ClientScopeComponent } from "./domain/clients/client/scopes/client-scope.component";
 import { ConsentsResolver } from "./resolvers/consents.resolver";
+import { AuditsComponent } from "./domain/settings/audits/audits.component";
+import { AuditComponent } from "./domain/settings/audits/audit/audit.component";
+import { AuditService } from "./services/audit.service";
+import { AuditsResolver } from "./resolvers/audits.resolver";
+import { AuditResolver } from "./resolvers/audit.resolver";
 
 @NgModule({
   declarations: [
@@ -279,7 +284,9 @@ import { ConsentsResolver } from "./resolvers/consents.resolver";
     EmailComponent,
     EmailInfoDialog,
     SelectClientsComponent,
-    ClientScopeComponent
+    ClientScopeComponent,
+    AuditsComponent,
+    AuditComponent
   ],
   imports: [
     BrowserModule,
@@ -336,6 +343,9 @@ import { ConsentsResolver } from "./resolvers/consents.resolver";
     EmailService,
     EmailResolver,
     ConsentsResolver,
+    AuditService,
+    AuditsResolver,
+    AuditResolver,
     { provide: Http, useClass: HttpService }
   ],
   entryComponents: [

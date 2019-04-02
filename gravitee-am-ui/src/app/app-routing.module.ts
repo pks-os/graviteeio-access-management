@@ -97,6 +97,10 @@ import {ScimComponent} from "./domain/settings/scim/scim.component";
 import {EmailResolver} from "./resolvers/email.resolver";
 import {ConsentsResolver} from "./resolvers/consents.resolver";
 import {UserApplicationComponent} from "./domain/settings/users/user/applications/application/application.component";
+import {AuditResolver} from "./resolvers/audit.resolver";
+import {AuditsComponent} from "./domain/settings/audits/audits.component";
+import {AuditsResolver} from "./resolvers/audits.resolver";
+import {AuditComponent} from "./domain/settings/audits/audit/audit.component";
 
 const routes: Routes = [
   { path: 'dashboard',
@@ -221,6 +225,24 @@ const routes: Routes = [
               { path: 'mappers', component: ProviderMappersComponent },
               { path: 'roles', component: ProviderRolesComponent, resolve: { roles: RolesResolver} }
             ]
+          },
+          { path: 'audits',
+            component: AuditsComponent,
+            resolve: {
+              audits: AuditsResolver,
+            },
+            data: {
+              menu: {
+                label: 'Audit Log',
+                section: 'Security'
+              }
+            }
+          },
+          { path: 'audits/:auditId',
+            component: AuditComponent,
+            resolve: {
+              scope: AuditResolver
+            }
           },
           { path: 'scopes',
             component: DomainSettingsScopesComponent,
@@ -464,6 +486,24 @@ const routes: Routes = [
             resolve: {
               extensionGrant: ExtensionGrantResolver,
               identityProviders: ProvidersResolver
+            }
+          },
+          { path: 'audits',
+            component: AuditsComponent,
+            resolve: {
+              audits: AuditsResolver,
+            },
+            data: {
+              menu: {
+                label: 'Audit Log',
+                section: 'Security'
+              }
+            }
+          },
+          { path: 'audits/:auditId',
+            component: AuditComponent,
+            resolve: {
+              scope: AuditResolver
             }
           },
           { path: 'certificates',

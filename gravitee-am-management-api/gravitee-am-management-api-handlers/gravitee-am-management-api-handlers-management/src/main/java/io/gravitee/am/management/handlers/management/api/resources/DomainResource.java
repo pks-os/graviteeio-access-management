@@ -165,4 +165,9 @@ public class DomainResource extends AbstractResource {
         return resourceContext.getResource(EmailsResource.class);
     }
 
+    @Path("audits")
+    public AuditsResource getAuditsResource() {
+        return resourceContext.getResource(AuditsResource.class);
+    }
+
 }

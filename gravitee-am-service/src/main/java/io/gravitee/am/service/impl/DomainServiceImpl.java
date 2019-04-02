@@ -88,6 +88,9 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private FormService formService;
 
+    @Autowired
+    private ReporterService reporterService;
+
     @Override
     public Maybe<Domain> findById(String id) {
         LOGGER.debug("Find domain by ID: {}", id);
@@ -144,6 +147,7 @@ public class DomainServiceImpl implements DomainService {
                     }
                 })
                 .flatMap(this::createSystemScopes)
+                .flatMap(this::createDefaultReporter)
                 .onErrorResumeNext(ex -> {
                     if (ex instanceof AbstractManagementException) {
                         return Single.error(ex);
@@ -331,6 +335,13 @@ public class DomainServiceImpl implements DomainService {
                                         return Completable.concat(deleteFormsCompletable);
                                     })
                             )
+                            // delete reporters
+                            .andThen(reporterService.findByDomain(domainId)
+                                    .flatMapCompletable(reporters -> {
+                                        List<Completable> deleteReportersCompletable = reporters.stream().map(r -> reporterService.delete(r.getId())).collect(Collectors.toList());
+                                        return Completable.concat(deleteReportersCompletable);
+                                    })
+                            )
                             .andThen(domainRepository.delete(domainId));
                 })
                 .onErrorResumeNext(ex -> {
@@ -377,6 +388,11 @@ public class DomainServiceImpl implements DomainService {
                 })
                 .lastOrError()
                 .map(scope -> domain);
+    }
+
+    private Single<Domain> createDefaultReporter(Domain domain) {
+        return reporterService.createDefault(domain.getId()).map(__ -> domain);
+
     }
 
     private String generateContextPath(String domainName) {
